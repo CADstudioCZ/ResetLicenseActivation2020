@@ -1,8 +1,10 @@
 # ResetLicenseActivation2020
 Tool for reset license activation for Autodesk products 2020 and above
 
-Tool is bsed on https://knowledge.autodesk.com/support/autocad/troubleshooting/caas/sfdcarticles/sfdcarticles/Forcing-re-activation-of-product.html#subscription
+Tool is bsed on
+
+https://knowledge.autodesk.com/support/autocad/troubleshooting/caas/sfdcarticles/sfdcarticles/Forcing-re-activation-of-product.html#subscription
 
 ## Usage
 
-Download and execute
+Download [out/ResetLicenseActivation2020.zip](out/ResetLicenseActivation2020.zip) and execute
