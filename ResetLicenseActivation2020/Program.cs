@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.Serialization.Json;
 using System.Text;
 
 namespace ResetLicense
@@ -19,11 +20,16 @@ namespace ResetLicense
 Automatized action described here:
 https://knowledge.autodesk.com/support/autocad/troubleshooting/caas/sfdcarticles/sfdcarticles/Forcing-re-activation-of-product.html#subscription
 ");
+            ResetAllLicenses();
+        }
+
+        private static void ResetAllLicenses()
+        {
             //Read license content
             string outputContent = ReadLicenseContent();
-            
+
             //Parse productInfos
-            var productInfos = Newtonsoft.Json.JsonConvert.DeserializeObject<ProductInfo[]>(outputContent);
+            var productInfos = ParseProductInfos(outputContent);
             PrintFoundLicenses(productInfos);
 
             //Unregister
@@ -36,6 +42,24 @@ https://knowledge.autodesk.com/support/autocad/troubleshooting/caas/sfdcarticles
             KillAdSSOExe();
 
             Console.WriteLine("GAME OVER");
+        }
+
+        private static ProductInfo[] ParseProductInfos(string outputContent)
+        {
+            /* Newtonsoft.JSON version
+            var productInfos = Newtonsoft.Json.JsonConvert.DeserializeObject<ProductInfo[]>(outputContent);
+            return productInfos;
+            */
+
+            // Deserialize a JSON stream to a User object.
+            var productInfos = new[] { new ProductInfo() };
+
+            var ms = new MemoryStream(Encoding.UTF8.GetBytes(outputContent));
+            var ser = new DataContractJsonSerializer(productInfos.GetType());
+            productInfos = ser.ReadObject(ms) as ProductInfo[];
+            ms.Close();
+            return productInfos;
+        
         }
 
         private static void UnregisterLicenses(ProductInfo[] productInfos)
